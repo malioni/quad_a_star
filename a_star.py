@@ -79,7 +79,7 @@ class AStarSearch:
                 break
     
             for next_point in self.graph.neighbors(point=current,step=self.step):
-                new_cost = cost_so_far[str(current)] + 0.7*self.step
+                new_cost = cost_so_far[str(current)] + 0.5*self.step
                 if str(next_point) not in cost_so_far or new_cost < cost_so_far[str(next_point)]:
                     cost_so_far[str(next_point)] = new_cost
                     priority = new_cost + self.heuristic(next_point)
