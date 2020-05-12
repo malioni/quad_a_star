@@ -53,7 +53,7 @@ class Graph:
             self.edges[dim] = [self.current[dim]-self.field_of_view,self.current[dim]+self.field_of_view]
 
 class AStarSearch:
-    def __init__(self, start, goal,obstacles,step=1,fow=1):
+    def __init__(self, start, goal,obstacles,step=1,fow=2):
         self.cost_so_far = {}
         self.came_from = {}
         self.goal = goal
@@ -79,7 +79,7 @@ class AStarSearch:
                 break
     
             for next_point in self.graph.neighbors(point=current,step=self.step):
-                new_cost = cost_so_far[str(current)] + self.step
+                new_cost = cost_so_far[str(current)] + 0.7*self.step
                 if str(next_point) not in cost_so_far or new_cost < cost_so_far[str(next_point)]:
                     cost_so_far[str(next_point)] = new_cost
                     priority = new_cost + self.heuristic(next_point)

@@ -11,7 +11,7 @@ class animation:
         self.handle = []
         self.obs_handle = []
         self.drawObstacles(obstacles)
-        plt.axis([0,10,0,10])
+        plt.axis([0,100,0,100])
         plt.ion()
 
     def drawObstacles(self,obstacles):
@@ -19,9 +19,9 @@ class animation:
         for i in range(len(obstacles)):
             if self.flagInit:
                 self.obs_handle.append(mpatches.Rectangle(xy=(obstacles[i][0],obstacles[i][1]),width=obstacles[i][2],height=obstacles[i][3],fill=True,fc='orange'))
-                self.ax.add_patch(self.obs_handle[0])
+                self.ax.add_patch(self.obs_handle[i])
             else:
-                self.obs_handle[0].set_xy((obstacles[i][0],obstacles[i][1]))
+                self.obs_handle[i].set_xy((obstacles[i][0],obstacles[i][1]))
 
     def drawEverything(self,point,path):
         self.drawObject(point)
@@ -63,22 +63,38 @@ class animation:
             self.handle[0].set_xy(xy)
 
 start = [1,1]
-goal = [10,10]
+goal = [80,80]
 step = 1
-fow = 3
-#obstacles = [[5.,5.,2.,2.],[7.,7.,1.,1.]]
-obstacles = []
+fow = 10
+obstacles = [[20,20,30,30],[60,60,10,10]]
+#obstacles = []
 
+a_obstacles = []
+x_coord = 20
+while x_coord <= 50:
+    y_coord = 20
+    while y_coord <= 50:
+        a_obstacles.append([x_coord,y_coord])
+        y_coord += 1
+    x_coord += 1
+
+x_coord = 60
+while x_coord <= 70:
+    y_coord = 60
+    while y_coord <= 70:
+        a_obstacles.append([x_coord,y_coord])
+        y_coord += 1
+    x_coord += 1
 
 pic = animation(obstacles=obstacles,fow=fow,start=start,goal=goal)
-a_star = AStarSearch(start=start,goal=goal,step=step,obstacles=[],fow=fow)
+a_star = AStarSearch(start=start,goal=goal,step=step,obstacles=a_obstacles,fow=fow)
 
 current = start
 
 while current != goal:
     path, cost_so_far, current = a_star.update()
     pic.drawEverything(current,path)
-    plt.pause(2.)
+    plt.pause(0.01)
 
 plt.show()
 
