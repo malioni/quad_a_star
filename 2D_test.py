@@ -11,7 +11,7 @@ class animation:
         self.handle = []
         self.obs_handle = []
         self.drawObstacles(obstacles)
-        plt.axis([0.,10.,0.,10.])
+        plt.axis([0,10,0,10])
         plt.ion()
 
     def drawObstacles(self,obstacles):
@@ -26,19 +26,19 @@ class animation:
     def drawEverything(self,point,path):
         self.drawObject(point)
         self.drawFrame(point)
-        self.drawPath(point,path)
+        self.drawPath(path)
         plt.pause(0.001)
 
         if self.flagInit:
             self.flagInit = False
 
     def drawFrame(self,point):
-        x = point[0] - self.fow/2.
-        y = point[1] - self.fow/2.
+        x = point[0] - self.fow
+        y = point[1] - self.fow
         xy = (x,y)
 
         if self.flagInit:
-            self.handle.append(mpatches.Rectangle(xy,self.fow,self.fow,fill=False,ec='black',lw = 0.1))
+            self.handle.append(mpatches.Rectangle(xy,2*self.fow,2*self.fow,fill=False,ec='black',lw = 1))
             self.ax.add_patch(self.handle[1])
         else:
             self.handle[1].set_xy(xy)
@@ -48,38 +48,37 @@ class animation:
         y_list = []
 
         for i in path:
-            x_list.append(path[i][0])
-            y_list.append(path[i][1])
+            x_list.append(i[0])
+            y_list.append(i[1])
 
         plt.scatter(x_list,y_list,s=10)
 
     def drawObject(self,point):
-        xy = (point[0],point[1])
+        xy = (point[0]-0.5,point[1]-0.5)
 
         if self.flagInit:
-            self.handle.append(mpatches.Circle(xy,radius = 0.3,fill=True,ec='blue'))
+            self.handle.append(mpatches.Rectangle(xy,height = 1,width=1,fill=True,ec='blue'))
             self.ax.add_patch(self.handle[0])
         else:
             self.handle[0].set_xy(xy)
 
-start = [0.5,0.5]
-goal = [10.,10.]
-step = 0.1
-fow = 1.
-obstacles = [[5.,5.,2.,2.],[7.,7.,1.,1.]]
+start = [1,1]
+goal = [10,10]
+step = 1
+fow = 3
+#obstacles = [[5.,5.,2.,2.],[7.,7.,1.,1.]]
+obstacles = []
 
 
 pic = animation(obstacles=obstacles,fow=fow,start=start,goal=goal)
-a_star = AStarSearch(start=start,goal=goal,step=step,obstacles=[])
+a_star = AStarSearch(start=start,goal=goal,step=step,obstacles=[],fow=fow)
 
 current = start
 
 while current != goal:
     path, cost_so_far, current = a_star.update()
     pic.drawEverything(current,path)
-    plt.pause(0.001)
+    plt.pause(2.)
 
 plt.show()
-plt.waitforbuttonpress()
-plt.close()
 
