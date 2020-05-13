@@ -35,6 +35,7 @@ class Graph:
         Defines the neighbors adjacent to the current block, and doesn't add
         them if they are in the obstacles list.
         """
+        #TODO: See if the aesthetic code works
         neighbors_list = []
 
         for dim in range(len(point)):
@@ -128,7 +129,7 @@ class AStarSearch:
         ### Because the cost is reduced by being direct, the multiplier above exists.
         distance = 0.
         for i in range(len(point)):
-            distance += (self.goal[i]-point[i])**2
+            distance += (self.goal[i]-point[i])**2)
         return sqrt(distance)
 
     def reconstruct_path(self,came_from,start,goal):
