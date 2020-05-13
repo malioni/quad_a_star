@@ -1,3 +1,9 @@
+"""
+A* implementation
+Based in code by Amit Patel, found at:
+    https://www.redblobgames.com/pathfinding/a-star/implementation.html
+"""
+
 import heapq
 from math import sqrt
 
@@ -61,7 +67,9 @@ class Graph:
         return False
 
     def update_obstacles(self,obstacles):
-        # FIXME: Unused?
+        """
+        Add obstacles to the self.obstacles list.
+        """
         for coord in range(len(obstacles)):
             self.obstacles.append(obstacles[coord])
 
@@ -82,7 +90,7 @@ class AStarSearch:
         self.goal = goal
         self.start = start
         self.step = step # Distance between points
-        self.current = start #
+        self.current = start
         self.graph = Graph(current = self.current,obstacles=obstacles,field_view=fow)
         self.came_from[str(self.current)] = None
         self.cost_so_far[str(self.current)] = 0.
@@ -105,7 +113,7 @@ class AStarSearch:
                 break
 
             for next_point in self.graph.neighbors(point=current,step=self.step):
-                new_cost = cost_so_far[str(current)] + 0.5*self.step # 0.5 is close to 1/sqrt(3), see heuristic
+                new_cost = cost_so_far[str(current)] + self.step
                 if str(next_point) not in cost_so_far or new_cost < cost_so_far[str(next_point)]:
                     cost_so_far[str(next_point)] = new_cost
                     priority = new_cost + self.heuristic(next_point)
@@ -125,12 +133,11 @@ class AStarSearch:
         """
         Finds the cost of getting from a point to the goal.
         """
-        ### This implementation uses the actual distance to the goal, ignoring steps.
-        ### Because the cost is reduced by being direct, the multiplier above exists.
         distance = 0.
+        # Use actual distance, with a modifier.
         for i in range(len(point)):
-            distance += (self.goal[i]-point[i])**2)
-        return sqrt(distance)
+            distance += (self.goal[i]-point[i])**2
+        return sqrt(distance) * 2
 
     def reconstruct_path(self,came_from,start,goal):
         """
