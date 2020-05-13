@@ -102,7 +102,6 @@ while x_coord <= 80:
             z_coord += 2
         y_coord += 2
     x_coord += 2
-print("Let'sDoThis")
 #pic = animation(obstacles=obstacles,fow=fow,start=start,goal=goal)
 a_star = AStarSearch(start=start,goal=goal,step=step,obstacles=a_obstacles,fow=fow)
 
