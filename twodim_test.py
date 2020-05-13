@@ -124,5 +124,3 @@ plt.scatter(y_list,z_list,s=10)
 
 plt.show()
 plt.pause(10)
-
-

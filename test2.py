@@ -62,36 +62,47 @@ class animation:
         else:
             self.handle[0].set_xy(xy)
 
-start = [0,0,0]
-goal = [80,80,80]
+start = [40,0,40]
+goal = [30,100,50]
 step = 2
 fow = 20
 #obstacles = [[20,20,30,30],[60,60,10,10]]
 #obstacles = []
 
 a_obstacles = []
-x_coord = 20
+x_coord = 0
 while x_coord <= 50:
     y_coord = 20
-    while y_coord <= 50:
-        z_coord = 20
+    while y_coord <= 24:
+        z_coord = 0
+        while z_coord <= 100:
+            a_obstacles.append([x_coord,y_coord,z_coord])
+            z_coord +=2
+        y_coord += 2
+    x_coord += 2
+
+x_coord = 0
+while x_coord <= 80:
+    y_coord = 50
+    while y_coord <= 54:
+        z_coord = 0
         while z_coord <= 50:
             a_obstacles.append([x_coord,y_coord,z_coord])
-            z_coord +=1
-        y_coord += 1
-    x_coord += 1
+            z_coord += 2
+        y_coord += 2
+    x_coord += 2
 
-x_coord = 60
-while x_coord <= 70:
-    y_coord = 60
-    while y_coord <= 70:
-        z_coord = 60
-        while z_coord <= 70:
+x_coord = 0
+while x_coord <= 80:
+    y_coord = 80
+    while y_coord <= 84:
+        z_coord = 40
+        while z_coord <= 100:
             a_obstacles.append([x_coord,y_coord,z_coord])
-            z_coord += 1
-        y_coord += 1
-    x_coord += 1
-
+            z_coord += 2
+        y_coord += 2
+    x_coord += 2
+print("Let'sDoThis")
 #pic = animation(obstacles=obstacles,fow=fow,start=start,goal=goal)
 a_star = AStarSearch(start=start,goal=goal,step=step,obstacles=a_obstacles,fow=fow)
 

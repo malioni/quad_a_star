@@ -11,11 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
 
-from test import path, goal
-
-# # Set up formatting for the movie files
-# Writer = animation.writers['ffmpeg']
-# writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=10000)
+from test2 import path, goal
 
 def gen_rand_points(num):
     """
@@ -45,7 +41,10 @@ def update_path(num, dataLines, lines):
         # NOTE: there is no .set_data() for 3 dim data...
         line.set_data(data[0:2, :num])
         line.set_3d_properties(data[2, :num])
-        # line.set_marker("o")
+
+        # Visualize Field of View
+        # line.set_marker("s")
+        # line.set_markeredgewidth(20)
     return lines
 
 def plot_cube(cube_definition):
@@ -91,8 +90,9 @@ def plot_cube(cube_definition):
 
     # ax.set_aspect('equal')
 
-obstacle1 = [(20,20,20), (20,20,50), (20,50,20), (50,20,20)]
-obstacle2 = [(60,60, 60), (60,60,70), (60,70,60), (70,60,60)]
+obstacle1 = [(0,20,0), (0,20,100), (0,24,0), (50,20,0)]
+obstacle2 = [(0,50,0), (80,50,0), (0,54,0), (0,50,50)]
+obstacle3 = [(0, 80, 40), (80, 80, 40), (0,84, 40), (0, 80, 100)]
 
 # data = [gen_3d_path_segments(([0, 0, 0], [1, 1, 1], [0.5, 1, 0.5]))]
 # data = [gen_3d_path_segments(gen_rand_points(50))]
@@ -108,7 +108,7 @@ lines = [ax.plot(dat[0, 0:1], dat[1, 0:1], dat[2, 0:1])[0] for dat in data]
 ax.set_xlim3d([0.0, 100.0])
 ax.set_xlabel('X')
 
-ax.set_ylim3d([0.0, 100.0])
+ax.set_ylim3d([0.0, 80.0])
 ax.set_ylabel('Y')
 
 ax.set_zlim3d([0.0, 100.0])
@@ -118,6 +118,7 @@ ax.set_title('3D Testing')
 
 plot_cube(obstacle1)
 plot_cube(obstacle2)
+plot_cube(obstacle3)
 
 [goal_x, goal_y, goal_z] = goal
 ax.scatter(goal_x, goal_y, goal_z, marker='*', color='y')
@@ -135,7 +136,5 @@ ax.scatter(goal_x, goal_y, goal_z, marker='*', color='y')
 # Creating the Animation object
 path_ani = animation.FuncAnimation(
     fig, update_path, len(path)+30, fargs=(data, lines), interval=20)
-#
-# path_ani.save('path.mp4', writer=writer)
 
 plt.show()
