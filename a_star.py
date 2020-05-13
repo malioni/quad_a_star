@@ -10,6 +10,7 @@ from math import sqrt
 class PriorityQueue:
     """
     Includes a list of items sorted by priority, lowest to highest.
+    Wrapper for the heapq class.
     """
     def __init__(self):
         self.elements = []
@@ -25,12 +26,13 @@ class PriorityQueue:
 
 class Graph:
     """
-    Includes the global view of the obstacles, as well as the field of view
-    definition.
+    The graph as known by the quadrotor. All obstacle locations can either be added
+    all at once or as they come into the quadrotors field of view without degrading
+    performance.
     """
     def __init__(self, current, obstacles = [], field_view=2):
         self.edges = {} # Edges of the field of view
-        self.obstacles = obstacles # List of all coordinates in obstacles
+        self.obstacles = obstacles # List of all coordinates in known obstacles
             # TODO: Faster way to evaluate? Or way without global knowledge?
         self.current = current # Current position of the quadrotor
         self.field_of_view = field_view # Size of the field of view, in each direction from the quadrotor
@@ -92,7 +94,8 @@ class AStarSearch:
         self.step = step # Distance between points
         self.current = start
         self.graph = Graph(current = self.current,obstacles=obstacles,field_view=fow)
-        self.came_from[str(self.current)] = None
+        self.came_from[str(self.current)] = None # As lists cannot be keys in dictionaries,
+        # we convert them to strings. Can be replaced with a better method.
         self.cost_so_far[str(self.current)] = 0.
 
     def update(self):
@@ -107,12 +110,15 @@ class AStarSearch:
         cost_so_far[str(self.current)] = self.cost_so_far[str(self.current)]
 
         while not frontier.empty():
-            current = frontier.get()
+            current = frontier.get() # Get next node with the lowest priority score
 
             if current == self.goal or self.graph.borders(point=current):
                 break
 
+            # Step through the available neighbors of the node
             for next_point in self.graph.neighbors(point=current,step=self.step):
+                # Calculate the cost of moving to the next point.
+                # For quadrotors the cost of moving to each node is the same 
                 new_cost = cost_so_far[str(current)] + self.step
                 if str(next_point) not in cost_so_far or new_cost < cost_so_far[str(next_point)]:
                     cost_so_far[str(next_point)] = new_cost
@@ -121,8 +127,9 @@ class AStarSearch:
                     came_from[str(next_point)] = current
 
         path = self.reconstruct_path(came_from,self.current,current)
-        self.current = path[1]
-        self.graph.current = self.current
+        self.current = path[1] # Take one step in the desired direction, first 
+        # point in path is the current location
+        self.graph.current = self.current # Update graph's knowledge of location
         self.cost_so_far[str(self.current)] = cost_so_far[str(self.current)]
         self.came_from[str(self.current)] = came_from[str(self.current)]
         self.graph.update_field_of_view()
@@ -153,5 +160,8 @@ class AStarSearch:
         return path
 
     def get_results(self):
+        """
+        Used to reconstruct the final path after the goal has been reached
+        """
         path = self.reconstruct_path(self.came_from,self.start,self.goal)
         return path
