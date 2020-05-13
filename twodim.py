@@ -62,11 +62,11 @@ class animation:
         else:
             self.handle[0].set_xy(xy)
 
-start = [1,1,1]
-goal = [80,80,80]
+start = [1,1]
+goal = [80,80]
 step = 1
 fow = 10
-#obstacles = [[20,20,30,30],[60,60,10,10]]
+obstacles = [[20,20,30,30],[60,60,10,10]]
 #obstacles = []
 
 a_obstacles = []
@@ -74,10 +74,7 @@ x_coord = 20
 while x_coord <= 50:
     y_coord = 20
     while y_coord <= 50:
-        z_coord = 20
-        while z_coord <= 50:
-            a_obstacles.append([x_coord,y_coord,z_coord])
-            z_coord +=1
+        a_obstacles.append([x_coord,y_coord])
         y_coord += 1
     x_coord += 1
 
@@ -85,42 +82,20 @@ x_coord = 60
 while x_coord <= 70:
     y_coord = 60
     while y_coord <= 70:
-        z_coord = 60
-        while z_coord <= 70:
-            a_obstacles.append([x_coord,y_coord,z_coord])
-            z_coord += 1
+        a_obstacles.append([x_coord,y_coord])
         y_coord += 1
     x_coord += 1
 
-#pic = animation(obstacles=obstacles,fow=fow,start=start,goal=goal)
+pic = animation(obstacles=obstacles,fow=fow,start=start,goal=goal)
 a_star = AStarSearch(start=start,goal=goal,step=step,obstacles=a_obstacles,fow=fow)
 
 current = start
 
+plt.scatter(goal[0], goal[1], marker='*', color='y')
+
 while current != goal:
     path, cost_so_far, current = a_star.update()
-    print(current)
-    # pic.drawEverything(current,path)
-    # plt.pause(0.01)
-plt.figure(1)
-
-path = a_star.get_results()
-
-x_list = []
-y_list = []
-z_list = []
-
-for i in path:
-    x_list.append(i[0])
-    y_list.append(i[1])
-    z_list.append(i[2])
-
-plt.subplot(311)
-plt.scatter(x_list,y_list,s=10)
-plt.subplot(312)
-plt.scatter(x_list,z_list,s=10)
-plt.subplot(313)
-plt.scatter(y_list,z_list,s=10)
+    pic.drawEverything(current,path)
+    plt.pause(0.01)
 
 plt.show()
-plt.pause(10)

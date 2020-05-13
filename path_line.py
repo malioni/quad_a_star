@@ -114,8 +114,6 @@ ax.set_ylabel('Y')
 ax.set_zlim3d([0.0, 100.0])
 ax.set_zlabel('Z')
 
-ax.set_title('3D Testing')
-
 plot_cube(obstacle1)
 plot_cube(obstacle2)
 
